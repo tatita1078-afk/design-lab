@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>LEDJ — первый экран, прототип</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0E0E10; --paper:#FAFAF8; --red:#FF2F22; --violet:#5B21F5; --mist:#8C8A87; --line:#E4E1D9;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Inter',sans-serif;color:var(--ink);background:#fff;}
+  a{text-decoration:none;color:inherit;}
+
+  /* ===== HEADER ===== */
+  header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px 48px;border-bottom:1px solid transparent;position:relative;z-index:20;
+  }
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Unbounded';font-weight:800;font-size:22px;}
+  .logo .mark{
+    width:34px;height:22px;border-radius:11px;
+    background:conic-gradient(from 200deg, var(--red), var(--violet), #fff, var(--red));
+    flex-shrink:0;
+  }
+  nav{display:flex;gap:34px;font-size:15px;font-weight:500;color:#1A1A1A;}
+  nav a{position:relative;}
+  nav a:hover{color:var(--violet);}
+  .head-right{display:flex;align-items:center;gap:30px;font-weight:500;}
+  .phone{color:var(--red);font-weight:700;}
+  .lang{color:#1A1A1A;}
+  .cta-btn{
+    display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--ink);border-radius:100px;
+    padding:13px 22px;font-weight:600;font-size:14px;white-space:nowrap;
+  }
+  .cta-btn svg{width:14px;height:14px;}
+
+  /* ===== HERO ===== */
+  .hero{position:relative;max-width:1500px;margin:0 auto;padding:54px 48px 70px;min-height:600px;}
+
+  .hero-content{
+    display:flex;flex-direction:column;align-items:center;text-align:center;
+    max-width:780px;margin:0 auto;position:relative;z-index:6;
+  }
+
+  .tags{display:flex;gap:12px;margin-bottom:34px;justify-content:center;flex-wrap:wrap;}
+  .tag-pill{
+    font-family:'Inter';font-weight:600;font-size:14px;padding:13px 22px;border-radius:100px;
+    border:1.5px solid var(--line);transition:border-color .3s, color .3s, background .3s;
+    cursor:default;display:inline-flex;align-items:center;gap:6px;background:#fff;
+  }
+  .tag-pill .arrow{
+    display:inline-block;opacity:0;transform:translateX(-6px);transition:opacity .25s, transform .25s;
+    color:var(--red);font-weight:700;
+  }
+  .tag-pill.active{border-color:var(--red);color:var(--red);}
+  .tag-pill.active .arrow{opacity:1;transform:translateX(0);}
+  .tags .tag-pill:nth-child(1),
+  .tags .tag-pill:nth-child(3){border-radius:0px;}
+
+  .headline{
+    font-family:'Unbounded';font-weight:800;font-size:58px;line-height:1.1;
+    margin:0 0 22px;text-align:center;
+  }
+  .sub{font-size:17px;color:#3A3A3A;max-width:480px;margin:0 0 30px;line-height:1.5;text-align:center;}
+
+  .primary-cta{
+    display:inline-flex;align-items:center;gap:10px;background:var(--red);color:#fff;
+    font-weight:700;font-size:15px;padding:16px 28px;border-radius:100px;position:relative;z-index:6;
+  }
+  .primary-cta svg{width:15px;height:15px;}
+
+  /* ===== GLITCH CTA (на основе сниппета Uiverse / namecho) ===== */
+  .glitch-btn,
+  .glitch-btn::after{
+    padding:16px 28px;
+    font-size:15px;
+    font-weight:700;
+    font-family:'Inter';
+    background:var(--red);
+    border:0;
+    color:#fff;
+    border-radius:100px;
+  }
+  .glitch-btn{
+    position:relative;
+    z-index:6;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    cursor:pointer;
+    isolation:isolate;
+  }
+  .glitch-btn::after{
+    --slice-0: inset(50% 50% 50% 50%);
+    --slice-1: inset(80% -6px 0 0);
+    --slice-2: inset(50% -6px 30% 0);
+    --slice-3: inset(10% -6px 85% 0);
+    --slice-4: inset(40% -6px 43% 0);
+    --slice-5: inset(80% -6px 5% 0);
+    content: "ОБСУДИТЬ ПРОЕКТ";
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:absolute;
+    top:0;left:0;right:0;bottom:0;
+    background: linear-gradient(45deg, transparent 3%, #00e6f6 3%, #00e6f6 5%, #ff013c 5%);
+    clip-path: var(--slice-0);
+    pointer-events:none;
+  }
+  .glitch-btn:hover::after{
+    animation: 1s glitchCta;
+    animation-timing-function: steps(2, end);
+  }
+  @keyframes glitchCta {
+    0%   { clip-path: var(--slice-1); transform: translate(-20px, -10px); }
+    10%  { clip-path: var(--slice-3); transform: translate(10px, 10px); }
+    20%  { clip-path: var(--slice-1); transform: translate(-10px, 10px); }
+    30%  { clip-path: var(--slice-3); transform: translate(0px, 5px); }
+    40%  { clip-path: var(--slice-2); transform: translate(-5px, 0px); }
+    50%  { clip-path: var(--slice-3); transform: translate(5px, 0px); }
+    60%  { clip-path: var(--slice-4); transform: translate(5px, 10px); }
+    70%  { clip-path: var(--slice-2); transform: translate(-10px, 10px); }
+    80%  { clip-path: var(--slice-5); transform: translate(20px, -10px); }
+    90%  { clip-path: var(--slice-1); transform: translate(-10px, 0px); }
+    100% { clip-path: var(--slice-1); transform: translate(0); }
+  }
+
+  /* ===== IMAGES (parallax targets) ===== */
+  .stage{position:absolute;inset:0;pointer-events:none;}
+  .img-el{
+    position:absolute;border-radius:28px;overflow:hidden;pointer-events:auto;
+    transition:opacity .4s ease, filter .4s ease;will-change:transform;
+    box-shadow:0 20px 44px -22px rgba(0,0,0,.35);
+  }
+  .img-el.round{border-radius:50%;}
+  .img-el .fill{width:100%;height:100%;}
+  .img-el.dim{opacity:.25;filter:saturate(.35);}
+
+  #imgStudio{ width:230px;height:230px; left:0; top:160px; border-radius:22px;}
+  #imgStudio .fill{background:
+      conic-gradient(from 200deg at 50% 45%, var(--red), var(--violet) 50%, #fff 75%, var(--red)),
+      linear-gradient(160deg,#1a1a2e,#0E0E10);
+  }
+
+  #imgBus{ width:300px;height:300px; left:175px; top:330px; }
+  #imgBus .fill{background:
+      conic-gradient(from 30deg at 50% 50%, var(--red), var(--violet) 45%, #fff 70%, var(--red)),
+      linear-gradient(180deg,#cfe8f7,#9fc8e0);
+  }
+
+  #imgPhone{ width:280px;height:280px; right:60px; top:130px; }
+  #imgPhone .fill{background:
+      conic-gradient(from 120deg at 45% 55%, var(--red), var(--violet) 50%, #fff 75%, var(--red)),
+      #f1efe9;
+  }
+
+  #imgSheets{ width:330px;height:230px; right:0; top:430px; border-radius:18px;}
+  #imgSheets .fill{background:
+      conic-gradient(from 250deg at 60% 40%, var(--violet), #fff 35%, var(--red) 65%, #0E0E10),
+      #f6f4f0;
+  }
+
+  /* ===== TICKER ===== */
+  .ticker-wrap{
+    background:var(--ink);border-radius:100px;overflow:hidden;padding:20px 0;
+    margin:140px 48px 0;position:relative;
+  }
+  .ticker-wrap::before,.ticker-wrap::after{content:"";position:absolute;top:0;bottom:0;width:80px;z-index:2;}
+  .ticker-wrap::before{left:0;background:linear-gradient(90deg,var(--ink),transparent);}
+  .ticker-wrap::after{right:0;background:linear-gradient(-90deg,var(--ink),transparent);}
+  .ticker-track{display:flex;gap:40px;white-space:nowrap;width:max-content;animation:tickerScroll 26s linear infinite;}
+  .ticker-track span{
+    color:#fff;font-size:15px;font-weight:500;display:flex;align-items:center;gap:16px;
+  }
+  .ticker-track span.hl{font-weight:700;}
+  .ticker-track .star{color:var(--red);font-size:16px;}
+  @keyframes tickerScroll{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+
+  /* ===== STATS ===== */
+  .stats-section{padding:120px 48px;display:flex;justify-content:space-around;text-align:center;flex-wrap:wrap;gap:40px;
+    opacity:0;transform:translateY(40px);transition:opacity .7s ease, transform .7s ease;}
+  .stats-section.show{opacity:1;transform:translateY(0);}
+  .stat-item .num{font-family:'Unbounded';font-weight:900;font-size:56px;line-height:1;}
+  .stat-item .num.c-black{color:var(--ink);}
+  .stat-item .num.c-violet{color:var(--violet);}
+  .stat-item .num.c-red{color:var(--red);}
+  .stat-item .lbl{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--mist);margin-top:10px;font-weight:600;}
+
+  .spacer{height:60vh;display:flex;align-items:center;justify-content:center;color:var(--mist);font-size:13px;font-family:monospace;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><span class="mark"></span>LEDJ</div>
+  <nav>
+    <a href="#">Каталог услуг</a>
+    <a href="#">Кейсы и отзывы</a>
+    <a href="#">Блог</a>
+    <a href="#">Об агентстве</a>
+    <a href="#">Контакты</a>
+  </nav>
+  <div class="head-right">
+    <span class="phone">+998 97 249 80 87</span>
+    <span class="lang">Русский</span>
+    <a class="cta-btn" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 19 19 5M9 5h10v10"/></svg>
+      ОБСУДИТЬ ПРОЕКТ
+    </a>
+  </div>
+</header>
+
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <div class="tags" id="tags">
+      <div class="tag-pill" data-key="bus">НАРУЖНАЯ РЕКЛАМА <span class="arrow">→</span></div>
+      <div class="tag-pill" data-key="studio">МЕДИА И СМИ <span class="arrow">→</span></div>
+      <div class="tag-pill" data-key="phone">SMM-ПРОДВИЖЕНИЕ <span class="arrow">→</span></div>
+      <div class="tag-pill" data-key="sheets">РЕКЛАМНЫЕ МАТЕРИАЛЫ <span class="arrow">→</span></div>
+    </div>
+
+    <h1 class="headline">Рекламное агентство<br>полного цикла</h1>
+    <p class="sub">От брифа до запуска — все каналы под одной крышей</p>
+    <a class="primary-cta glitch-btn" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 19 19 5M9 5h10v10"/></svg>
+      ОБСУДИТЬ ПРОЕКТ
+    </a>
+  </div>
+
+  <div class="stage">
+    <div class="img-el"       id="imgStudio" data-key="studio" data-depth="20" data-reverse="0"><div class="fill"></div></div>
+    <div class="img-el round" id="imgBus"     data-key="bus"    data-depth="13" data-reverse="1"><div class="fill"></div></div>
+    <div class="img-el round" id="imgPhone"   data-key="phone"  data-depth="26" data-reverse="0"><div class="fill"></div></div>
+    <div class="img-el"       id="imgSheets"  data-key="sheets" data-depth="17" data-reverse="1"><div class="fill"></div></div>
+  </div>
+</section>
+
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <span><span class="star">✷</span>ОРИГИНАЛЬНЫЕ ИДЕИ ДЛЯ РЕКЛАМЫ</span>
+    <span><span class="star">✷</span>ЭФФЕКТИВНЫЕ СТРАТЕГИИ ПРОДВИЖЕНИЯ</span>
+    <span class="hl"><span class="star">✷</span>ПОМОЖЕМ ВЫДЕЛИТЬСЯ НА РЫНКЕ</span>
+    <span><span class="star">✷</span>ОРИГИНАЛЬНЫЕ ИДЕИ ДЛЯ РЕКЛАМЫ</span>
+    <span><span class="star">✷</span>ЭФФЕКТ</span>
+    <span><span class="star">✷</span>ОРИГИНАЛЬНЫЕ ИДЕИ ДЛЯ РЕКЛАМЫ</span>
+    <span><span class="star">✷</span>ЭФФЕКТИВНЫЕ СТРАТЕГИИ ПРОДВИЖЕНИЯ</span>
+    <span class="hl"><span class="star">✷</span>ПОМОЖЕМ ВЫДЕЛИТЬСЯ НА РЫНКЕ</span>
+    <span><span class="star">✷</span>ОРИГИНАЛЬНЫЕ ИДЕИ ДЛЯ РЕКЛАМЫ</span>
+    <span><span class="star">✷</span>ЭФФЕКТ</span>
+  </div>
+</div>
+
+<div class="spacer">↓ скролльте вниз, чтобы увидеть анимацию блока с цифрами ↓</div>
+
+<section class="stats-section" id="stats">
+  <div class="stat-item"><div class="num c-black" data-target="150" data-suffix="+">0</div><div class="lbl">Реализованных проектов</div></div>
+  <div class="stat-item"><div class="num c-violet" data-target="300" data-suffix="+">0</div><div class="lbl">Рекламных поверхностей</div></div>
+  <div class="stat-item"><div class="num c-red" data-target="99" data-suffix="%">0</div><div class="lbl">Кампаний запущены в срок</div></div>
+</section>
+
+<script>
+  // ===== Parallax по мыши =====
+  const hero = document.getElementById('hero');
+  const imgs = Array.from(document.querySelectorAll('.img-el'));
+
+  hero.addEventListener('mousemove', (e) => {
+    const rect = hero.getBoundingClientRect();
+    const cx = (e.clientX - rect.left) / rect.width - 0.5;
+    const cy = (e.clientY - rect.top) / rect.height - 0.5;
+    imgs.forEach(img => {
+      const depth = parseFloat(img.dataset.depth);
+      const reverse = img.dataset.reverse === '1' ? -1 : 1;
+      const x = cx * depth * reverse;
+      const y = cy * depth * reverse;
+      img.style.transform = `translate(${x}px, ${y}px)`;
+    });
+  });
+  hero.addEventListener('mouseleave', () => {
+    imgs.forEach(img => img.style.transform = 'translate(0,0)');
+  });
+
+  // ===== Синхронизация тег <-> изображение =====
+  const tags = Array.from(document.querySelectorAll('.tag-pill'));
+
+  function activate(key){
+    tags.forEach(t => t.classList.toggle('active', t.dataset.key === key));
+    imgs.forEach(img => img.classList.toggle('dim', img.dataset.key !== key));
+  }
+  function reset(){
+    tags.forEach(t => t.classList.remove('active'));
+    imgs.forEach(img => img.classList.remove('dim'));
+  }
+
+  tags.forEach(tag => {
+    tag.addEventListener('mouseenter', () => activate(tag.dataset.key));
+  });
+  document.getElementById('tags').addEventListener('mouseleave', reset);
+
+  imgs.forEach(img => {
+    img.addEventListener('mouseenter', () => activate(img.dataset.key));
+    img.addEventListener('mouseleave', reset);
+  });
+
+  // ===== Появление блока цифр по скроллу + count-up =====
+  const statsSection = document.getElementById('stats');
+  const nums = Array.from(document.querySelectorAll('.num'));
+  let played = false;
+
+  function easeOutQuad(t){ return t * (2 - t); }
+
+  function countUp(el){
+    const target = parseFloat(el.dataset.target);
+    const suffix = el.dataset.suffix || '';
+    const duration = 1200;
+    const start = performance.now();
+    function tick(now){
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = easeOutQuad(progress);
+      el.textContent = Math.round(eased * target) + suffix;
+      if(progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting && !played){
+        played = true;
+        statsSection.classList.add('show');
+        nums.forEach(n => countUp(n));
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.35 });
+
+  observer.observe(statsSection);
+</script>
+
+</body>
+</html>
